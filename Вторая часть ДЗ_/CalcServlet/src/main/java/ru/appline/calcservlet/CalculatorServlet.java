@@ -27,7 +27,7 @@ public class CalculatorServlet extends HttpServlet {
                 buffer.append(line);
             }
         } catch (Exception e) {
-            System.out.println("Error " + e.getMessage());
+            System.out.println("Error");
         }
         String jsonString = buffer.toString();
 
@@ -54,7 +54,7 @@ public class CalculatorServlet extends HttpServlet {
                     result = a / b;
                 } else {
                     response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                    pw.print("{\"error\": \"На ноль действительно делить нельзя\"}");
+                    pw.print("{\"error\": \"На ноль делить нельзя\"}");
                     return;
                 }
                 break;
