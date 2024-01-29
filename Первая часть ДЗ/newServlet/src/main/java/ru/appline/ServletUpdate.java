@@ -17,6 +17,7 @@ import java.io.IOException;
 @WebServlet(urlPatterns = "/update")
 public class ServletUpdate extends HttpServlet {
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
         StringBuilder sb = new StringBuilder();
         String line;
@@ -38,11 +39,22 @@ public class ServletUpdate extends HttpServlet {
         double salary = jobj.get("salary").getAsDouble();
 
         Model model = Model.getInstance();
-        User user = new User(name, surname, salary);
-        model.update(user,id);
+        User existingUser = model.getFromList().get(id);
 
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(jobj.toString());
+        if (existingUser != null) {
+            // Обновляем существующего пользователя
+            existingUser.setName(name);
+            existingUser.setSurname(surname);
+            existingUser.setSalary(salary);
+
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(gson.toJson(existingUser));
+        } else {
+            // Возвращаем сообщение о том, что записи нет
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(gson.toJson("Записи с id=" + id + " не существует."));
+        }
     }
 }

@@ -70,25 +70,17 @@ public class ServletList extends HttpServlet {
 
         int id = Integer.parseInt(request.getParameter("id"));
 
-        if (id <= 0) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            pw.print(gson.toJson("ID должен быть больше 0"));
-            return;
-        }
-
-        if (id > model.getFromList().size()) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            pw.print(gson.toJson("Такого пользователя нет :<"));
-        } else {
-            response.setStatus(HttpServletResponse.SC_OK);
-            if (id == 0) {
-                pw.print(gson.toJson(model.getFromList()));
+        if (id == 0) {
+            pw.print(gson.toJson(model.getFromList()));
+        } else if (id > 0) {
+            if (id > model.getFromList().size()) {
+                pw.print(gson.toJson("Такого пользователя нет :<"));
             } else {
                 pw.print(gson.toJson(model.getFromList().get(id)));
             }
+        } else {
+            pw.print(gson.toJson("ID должен быть больше 0"));
         }
     }
-
-
 }
 
